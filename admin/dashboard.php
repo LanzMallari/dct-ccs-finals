@@ -1,6 +1,10 @@
 <!-- Template Files here -->
 
 <?php
+include('../functions.php');
+
+
+
 $title="Dashboard";
 include('./partials/header.php');
 include('./partials/side-bar.php');

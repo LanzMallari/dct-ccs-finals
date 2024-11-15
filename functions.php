@@ -1,7 +1,6 @@
 <?php
-session_start(); // Start the session at the beginning
+session_start();
 
-// Open MySQL database connection
 function openCon() {
     $conn = mysqli_connect("localhost", "root", "", "dct-ccs-finals");
 
@@ -11,45 +10,37 @@ function openCon() {
     return $conn;
 }
 
-// Close MySQL database connection
 function closeCon($conn) {
-    return mysqli_close($conn);  // Pass $conn to close the connection
+    return mysqli_close($conn);
 }
 
 function loginUser($username, $password) {
-    // Open database connection
     $conn = openCon();
 
-    // Hash the password using md5
     $hashedPassword = md5($password);
 
-    // Prepare the SQL query - make sure the table name is correct (users instead of user)
     $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $hashedPassword); // Bind the email and hashed password
+    $stmt->bind_param("ss", $username, $hashedPassword);
 
-    // Execute the query
     $stmt->execute();
 
-    // Get the result
     $result = $stmt->get_result();
 
-    // Check if a user is found
     if ($result->num_rows > 0) {
-        // Fetch the user data (optional, if you want to store more info in session)
         $user = $result->fetch_assoc();
 
-        // Store user session data
         $_SESSION['email'] = $username;
-        $_SESSION['user_id'] = $user['id']; // Store user ID (if you have an 'id' column in your table)
-        return true; // Login successful
+        $_SESSION['user_id'] = $user['id'];
+        return true;
     } else {
-        // Invalid login credentials
         return false;
     }
 
-    // Close the statement and connection
     $stmt->close();
-    closeCon($conn);  // Pass $conn to close the connection
+    closeCon($conn);
 }
+
+
+
 ?>
