@@ -1,3 +1,22 @@
+<?php
+include('functions.php'); // Include the functions file
+
+if (isset($_POST['login'])) {
+    $username = $_POST['email'];
+    $password = $_POST['password'];
+
+    if (loginUser($username, $password)) {
+        header('Location: ./admin/dashboard.php');
+        exit();
+    } else {
+        echo "Invalid username or password.";
+    }
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,6 +45,7 @@
                         </div>
                         <div class="form-floating mb-3">
                             <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
+                            <a href="database.php"></a>
                         </div>
                     </form>
                 </div>

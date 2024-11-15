@@ -2,8 +2,8 @@
 
 <?php
 $title="Dashboard";
-include('partials/header.php');
-include('partials/side-bar.php');
+include('./partials/header.php');
+include('./partials/side-bar.php');
 
 
 
@@ -49,6 +49,6 @@ include('partials/side-bar.php');
 </main>
 
 <?php
-include('partials/footer.php'); 
+include('./partials/footer.php'); 
 ?>
 <!-- Template Files here -->
