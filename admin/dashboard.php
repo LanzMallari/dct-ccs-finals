@@ -1,6 +1,15 @@
 <!-- Template Files here -->
+
+<?php
+$title="Dashboard";
+include('partials/header.php');
+include('partials/side-bar.php');
+
+
+
+?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">    
-    <h1 class="h2">Dashboard</h1>        
+    <h1 class="h2"><php echo $title ?></h1>        
     
     <div class="row mt-5">
         <div class="col-12 col-xl-3">
@@ -35,6 +44,11 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>   
+
 </main>
+
+<?php
+include('partials/footer.php'); 
+?>
 <!-- Template Files here -->
