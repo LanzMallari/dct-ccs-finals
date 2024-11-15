@@ -1,4 +1,7 @@
 <?php
+
+
+
 $title = "Add a New Subject"; // Set the title variable
 include('admin/partials/header.php'); // Include the header file
 include('admin/partials/side-bar.php'); // Include the sidebar file
