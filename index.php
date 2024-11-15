@@ -1,6 +1,8 @@
 <?php
 include('functions.php'); // Include the functions file
 
+$errorMessage = ''; // Initialize error message variable
+
 if (isset($_POST['login'])) {
     $username = $_POST['email'];
     $password = $_POST['password'];
@@ -9,13 +11,10 @@ if (isset($_POST['login'])) {
         header('Location: ./admin/dashboard.php');
         exit();
     } else {
-        echo "Invalid username or password.";
+        $errorMessage = "Invalid username or password."; // Set error message if login fails
     }
 }
-
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,13 +23,29 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title></title>
+    <title>Login</title>
+    <style>
+        .error-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body class="bg-secondary-subtle">
     <div class="d-flex align-items-center justify-content-center vh-100">
         <div class="col-3">
-            <!-- Server-Side Validation Messages should be placed here -->
+            <!-- Display error message if any -->
+            <?php if ($errorMessage): ?>
+                <div class="error-box">
+                  <li>  <?php echo $errorMessage; ?></li>
+                </div>
+            <?php endif; ?>
+
             <div class="card">
                 <div class="card-body">
                     <h1 class="h3 mb-4 fw-normal">Login</h1>
