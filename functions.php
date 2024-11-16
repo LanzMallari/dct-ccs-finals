@@ -40,7 +40,16 @@ function loginUser($username, $password) {
     $stmt->close();
     closeCon($conn);
 }
+function guard() {
+    if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
+        header("Location: index.php");
+        exit();
+    }}
 
+
+function isLoggedIn() {
+    return isset($_SESSION['email']);
+}
 
 
 ?>

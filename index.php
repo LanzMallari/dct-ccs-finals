@@ -14,6 +14,11 @@ if (isset($_POST['login'])) {
         $errorMessage = "Invalid username or password."; // Set error message if login fails
     }
 }
+if (isset($_SESSION['email'])) {
+    // Redirect to the dashboard if already logged in
+    header("Location:./admin/dashboard.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
