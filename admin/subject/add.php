@@ -1,19 +1,45 @@
-
 <?php
 include('../../functions.php'); // Adjusted path to functions.php
 
 // Check if the user is logged in, otherwise redirect
 guard();
 
+// Error messages array
+$errorMessages = [];
+
 // Handle subject form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['subject_code'], $_POST['subject_name'])) {
     $subject_code = $_POST['subject_code'];
     $subject_name = $_POST['subject_name'];
 
-    if (addSubject($subject_code, $subject_name)) {
-        echo "<p>Subject added successfully.</p>";
-    } else {
-        echo "<p>Error adding subject.</p>";
+    // Check if subject code is empty
+    if (empty($subject_code)) {
+        $errorMessages[] = "Subject code cannot be empty.";
+    }
+
+    // Check if the subject code already exists in the database
+    if (empty($errorMessages)) {
+        $conn = openCon();
+        $sql = "SELECT * FROM subjects WHERE subject_code = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $subject_code);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $errorMessages[] = "Subject code already exists.";
+        }
+        $stmt->close();
+        closeCon($conn);
+    }
+
+    // If there are no errors, insert the new subject
+    if (empty($errorMessages)) {
+        if (addSubject($subject_code, $subject_name)) {
+            echo "<p>Subject added successfully.</p>";
+        } else {
+            echo "<p>Error adding subject.</p>";
+        }
     }
 }
 
@@ -47,13 +73,13 @@ closeCon($conn);
 
         .h2 {
             width: 60%;
-            margin-left: 150px;
+            margin-left: 170px;
         }
 
         .breadcrumbs {
             margin: 10px 0;
             width: 40%;
-            margin-left: 150px; /* Adjust this value to control how much to the left */
+            margin-left: 100px; /* Adjust this value to control how much to the left */
         }
 
         .breadcrumbs ol {
@@ -69,6 +95,31 @@ closeCon($conn);
 
         .breadcrumbs .breadcrumb-item.active {
             color: #6c757d;
+        }
+
+        .error-box {
+            width: 86%;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-left: 105px;
+        }
+
+        .error-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .error-box li {
+            margin-bottom: 10px;
+        }
+
+        .error-box .error-title {
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .form-group {
@@ -167,7 +218,13 @@ closeCon($conn);
         }
 
         .btn.btn-primary {
-            width: 100%; /* Set your desired width */
+            width: 100%; 
+        }
+
+    
+        h2 {
+            text-align: left; 
+            margin-left: 100px; 
         }
     </style>
 </head>
@@ -186,16 +243,26 @@ closeCon($conn);
             </ol>
         </nav>
 
+        <!-- Error Box -->
+        <?php if (!empty($errorMessages)): ?>
+            <div class="error-box">
+                <div class="error-title">System Errors:</div> <!-- Title above the errors -->
+                <ul>
+                    <?php foreach ($errorMessages as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <!-- Subject Form -->
         <div class="container">
             <form action="add.php" method="POST">
                 <div class="form-group">
-                   
-                    <input type="text" id="subjectCode" name="subject_code" placeholder="Subject Code" required>
+                    <input type="text" id="subjectCode" name="subject_code" placeholder="Subject Code" >
                 </div>
                 <div class="form-group">
-                   
-                    <input type="text" id="subjectName" name="subject_name" placeholder="Subject Name" required>
+                    <input type="text" id="subjectName" name="subject_name" placeholder="Subject Name" >
                 </div>
                 <button type="submit" class="btn btn-primary">Add Subject</button>
             </form>
@@ -221,7 +288,7 @@ closeCon($conn);
                                     <td>{$row['subject_name']}</td>
                                     <td class='action-buttons'>
                                         <a href='edit.php?id={$row['id']}' class='btn btn-custom'>Edit</a>
-                                        <a href='delete_subject.php?id={$row['id']}' class='btn btn-custom delete'>Delete</a>
+                                        <a href='delete.php?id={$row['id']}' class='btn btn-custom delete'>Delete</a>
                                     </td>
                                   </tr>";
                         }

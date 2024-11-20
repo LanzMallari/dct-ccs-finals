@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .breadcrumbs {
             margin: 10px 0;
             width: 40%;
-            margin-left: 150px;
+            margin-left: 100px;
         }
 
         .breadcrumbs ol {
@@ -122,6 +122,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .form-group button:hover {
             background-color: #0056b3;
+        }
+        .btn.btn-primary {
+            width: 100%; 
+        }
+
+      
+        h2 {
+            text-align: left;
+            margin-left: 100px; 
         }
     </style>
 </head>

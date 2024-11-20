@@ -38,6 +38,22 @@ if (isset($_SESSION['email'])) {
             padding: 20px;
             margin-bottom: 20px;
         }
+
+        .error-box h5 {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .error-box li {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .error-box ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
     </style>
 </head>
 
@@ -47,7 +63,10 @@ if (isset($_SESSION['email'])) {
             <!-- Display error message if any -->
             <?php if ($errorMessage): ?>
                 <div class="error-box">
-                  <li>  <?php echo $errorMessage; ?></li>
+                    <h5>System Error</h5> <!-- Added bolded text above the list -->
+                    <ul>
+                        <li><?php echo $errorMessage; ?></li>
+                    </ul>
                 </div>
             <?php endif; ?>
 
