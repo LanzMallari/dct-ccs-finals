@@ -233,7 +233,6 @@ function registerStudent($studentId, $firstName, $lastName) {
 * @return bool True if the student is registered successfully, false otherwise
 **/
 
-
 function getStudents() {
     $conn = openCon();
     $sql = "SELECT * FROM students";
@@ -280,6 +279,42 @@ function getStudentById($id) {
     $stmt->close();
     closeCon($conn);
     return null;
+}
+/**
+ * Updates an existing student's details in the database
+ *
+ * @param int $id The ID of the student to update
+ * @param string $studentId The updated student ID
+ * @param string $firstName The updated first name
+ * @param string $lastName The updated last name
+ * @return bool True if the update is successful, false otherwise
+ */
+function updateStudent($id, $studentId, $firstName, $lastName) {
+    $conn = openCon(); // Open the database connection
+
+    $sql = "UPDATE students SET student_id = ?, first_name = ?, last_name = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        error_log("Error preparing SQL statement: " . $conn->error);
+        closeCon($conn);
+        return false;
+    }
+
+    // Bind the parameters
+    $stmt->bind_param("sssi", $studentId, $firstName, $lastName, $id);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        $stmt->close();
+        closeCon($conn);
+        return true;
+    } else {
+        error_log("Error executing SQL query: " . $stmt->error);
+        $stmt->close();
+        closeCon($conn);
+        return false;
+    }
 }
 
 ?>

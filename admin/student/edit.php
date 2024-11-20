@@ -1,4 +1,6 @@
 <?php
+ob_start(); // Start output buffering
+
 // Include necessary files
 include('../../functions.php');  // Include the functions file
 include('../partials/header.php');
@@ -6,7 +8,6 @@ include('../partials/side-bar.php');
 
 $title = "Edit Student"; // Set the title variable
 
-// Get the student details to edit
 $studentId = $_GET['id'] ?? null; // Check if 'id' is set in the query string
 if (!$studentId) {
     echo "<p class='alert alert-danger'>Invalid student ID.</p>";
@@ -19,6 +20,7 @@ if (!$student) {
     exit;
 }
 
+// Handle form submission and update student
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form data
     $updatedStudentId = $_POST['studentId'];
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update the student details
     if (updateStudent($studentId, $updatedStudentId, $firstName, $lastName)) {
-        header('Location: add.php'); // Redirect after updating
+        header('Location: register.php'); // Redirect after updating
         exit;
     } else {
         echo "<p class='alert alert-danger'>Failed to update student.</p>";
@@ -116,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <nav aria-label="breadcrumb" class="breadcrumbs">
         <ol>
-            <li><a href="dashboard.php">Dashboard</a> /</li>
-            <li><a href="register_student.php">Register Student</a> /</li>
+            <li><a href="../dashboard.php">Dashboard</a> /</li>
+            <li><a href="register.php">Register Student</a> /</li>
             <li class="active">Edit Student</li>
         </ol>
     </nav>
@@ -126,7 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="" method="POST">
             <div class="form-group">
                 <label for="studentId">Student ID</label>
-                <input type="text" id="studentId" name="studentId" value="<?php echo htmlspecialchars($student['student_id']); ?>" required>
+                <!-- Make Student ID field readonly -->
+                <input type="text" id="studentId" name="studentId" value="<?php echo htmlspecialchars($student['student_id']); ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="firstName">First Name</label>
@@ -143,4 +146,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php
 include('../partials/footer.php'); // Include the footer
-?>
+
+ob_end_flush(); // End the output buffer and send the content
+?> 
