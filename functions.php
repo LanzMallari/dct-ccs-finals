@@ -187,4 +187,68 @@ function countSubjects() {
         return 0; // Return 0 if there's an error
     }
 }
+
+
+/**
+ * Registers a new student in the database
+ * @param string $studentId The student ID
+ * @param string $firstName The student's first name
+ * @param string $lastName The student's last name
+ * @return bool True if the student is registered successfully, false otherwise
+ */
+function registerStudent($studentId, $firstName, $lastName) {
+    $conn = openCon(); // Open database connection
+    $sql = "INSERT INTO students (student_id, first_name, last_name) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        error_log("Error preparing SQL statement: " . $conn->error);
+        closeCon($conn);
+        return false;
+    }
+
+    $stmt->bind_param("sss", $studentId, $firstName, $lastName);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        closeCon($conn);
+        return true;
+    } else {
+        error_log("Error executing SQL query: " . $stmt->error);
+        $stmt->close();
+        closeCon($conn);
+        return false;
+    }
+}
+
+/**
+ * Retrieves all students from the database
+ * @return array An array of students
+ */
+
+/** Registers a new student in the database
+* @param string $studentId The student ID
+* @param string $firstName The student's first name
+* @param string $lastName The student's last name
+* @return bool True if the student is registered successfully, false otherwise
+**/
+
+
+function getStudents() {
+    $conn = openCon();
+    $sql = "SELECT * FROM students";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        $students = $result->fetch_all(MYSQLI_ASSOC);
+        closeCon($conn);
+        return $students;
+    } else {
+        error_log("Error fetching students: " . $conn->error);
+        closeCon($conn);
+        return [];
+    }
+}
+
+
 ?>
