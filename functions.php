@@ -250,5 +250,36 @@ function getStudents() {
     }
 }
 
+function getStudentById($id) {
+    // Open database connection
+    $conn = openCon();
+
+    // Prepare the SQL query to fetch student by ID
+    $stmt = $conn->prepare("SELECT * FROM students WHERE id = ?");
+    if (!$stmt) {
+        error_log("Error preparing SQL statement: " . $conn->error);
+        return null;
+    }
+
+    // Bind the ID parameter
+    $stmt->bind_param("i", $id); // Use integer type binding
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+
+    // Fetch and return the student data as an associative array
+    if ($result->num_rows > 0) {
+        $student = $result->fetch_assoc();
+        $stmt->close();
+        closeCon($conn);
+        return $student;
+    }
+
+    // Return null if no student is found
+    $stmt->close();
+    closeCon($conn);
+    return null;
+}
 
 ?>
