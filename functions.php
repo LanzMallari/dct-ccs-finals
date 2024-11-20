@@ -21,6 +21,13 @@ function closeCon($conn) {
 }
 
 /**
+ * Custom debug logging function.
+ */
+function debugLog($message) {
+    error_log("[DEBUG] " . $message);
+}
+
+/**
  * Logs in the user by checking username and password
  */
 function loginUser($username, $password) {
@@ -105,33 +112,37 @@ function addSubject($subject_code, $subject_name) {
  * Updates an existing subject in the subjects table
  */
 function updateSubject($id, $subject_code, $subject_name) {
-    if (empty($subject_code) || empty($subject_name)) {
-        error_log("Invalid subject_code or subject_name provided.");
+    if (empty($subject_code) || empty($subject_name) || empty($id)) {
+        debugLog("Invalid input provided to updateSubject.");
         return false;
     }
 
     $conn = openCon();
-
     $sql = "UPDATE subjects SET subject_code = ?, subject_name = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
-        error_log("Error preparing statement: " . $conn->error);
+        debugLog("Error preparing statement: " . $conn->error);
         return false;
     }
 
     $stmt->bind_param("ssi", $subject_code, $subject_name, $id);
 
     if ($stmt->execute()) {
-        $stmt->close();
-        closeCon($conn);
-        return true;
+        if ($stmt->affected_rows > 0) {
+            $stmt->close();
+            closeCon($conn);
+            return true;
+        } else {
+            debugLog("No rows were updated for ID: $id");
+        }
     } else {
-        error_log("Error executing query: " . $stmt->error);
-        $stmt->close();
-        closeCon($conn);
-        return false;
+        debugLog("Error executing query: " . $stmt->error);
     }
+
+    $stmt->close();
+    closeCon($conn);
+    return false;
 }
 
 /**
