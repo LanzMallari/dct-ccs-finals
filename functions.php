@@ -148,21 +148,23 @@ function updateSubject($id, $subject_code, $subject_name) {
 /**
  * Deletes a subject from the subjects table
  */
-function deleteSubject($id) {
-    $conn = openCon();
+function deleteSubject($subject_id) {
+    $conn = openCon();  // Open database connection
 
-    $sql = "DELETE FROM subjects WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    // Prepare SQL query to delete the subject by ID
+    $stmt = $conn->prepare("DELETE FROM subjects WHERE id = ?");
+    $stmt->bind_param("i", $subject_id);
 
     if ($stmt->execute()) {
         $stmt->close();
-        closeCon($conn);
-        return true;
+        closeCon($conn);  // Close the connection
+        return true;  // Successfully deleted
     } else {
         $stmt->close();
-        closeCon($conn);
-        return false;
+        closeCon($conn);  // Close the connection
+        return false;  // Deletion failed
     }
 }
+
+
 ?>
