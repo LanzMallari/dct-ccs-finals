@@ -1,5 +1,6 @@
+
 <?php
-include('functions.php');
+include('../../functions.php'); // Adjusted path to functions.php
 
 // Check if the user is logged in, otherwise redirect
 guard();
@@ -171,8 +172,8 @@ closeCon($conn);
     </style>
 </head>
 <body>
-    <?php include('admin/partials/header.php'); ?>
-    <?php include('admin/partials/side-bar.php'); ?>
+    <?php include('../partials/header.php'); ?>
+    <?php include('../partials/side-bar.php'); ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
         <h2>Add a New Subject</h2>
@@ -180,14 +181,14 @@ closeCon($conn);
         <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="./admin/dashboard.php">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Add Subject</li>
             </ol>
         </nav>
 
         <!-- Subject Form -->
         <div class="container">
-            <form action="subject.php" method="POST">
+            <form action="add.php" method="POST">
                 <div class="form-group">
                    
                     <input type="text" id="subjectCode" name="subject_code" placeholder="Subject Code" required>
@@ -219,7 +220,7 @@ closeCon($conn);
                                     <td>{$row['subject_code']}</td>
                                     <td>{$row['subject_name']}</td>
                                     <td class='action-buttons'>
-                                        <a href='edit_subject.php?id={$row['id']}' class='btn btn-custom'>Edit</a>
+                                        <a href='edit.php?id={$row['id']}' class='btn btn-custom'>Edit</a>
                                         <a href='delete_subject.php?id={$row['id']}' class='btn btn-custom delete'>Delete</a>
                                     </td>
                                   </tr>";
@@ -233,6 +234,6 @@ closeCon($conn);
         </div>
     </main>
 
-    <?php include('admin/partials/footer.php'); ?>
+    <?php include('../partials/footer.php'); ?>
 </body>
 </html>

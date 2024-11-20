@@ -1,5 +1,5 @@
 <?php
-include('functions.php');
+include('../../functions.php');
 
 // Ensure the user is logged in
 guard();
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Update the subject name
         if (updateSubject($id, $subject['subject_code'], $subject_name)) {
             // Redirect to subject.php after a successful update
-            header("Location: subject.php");
+            header("Location: add.php");
             exit();
         } else {
             echo "<p style='color: red;'>Error updating subject.</p>";
@@ -126,8 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-    <?php include('admin/partials/header.php'); ?>
-    <?php include('admin/partials/side-bar.php'); ?>
+    <?php include('../partials/header.php'); ?>
+    <?php include('../partials/side-bar.php'); ?>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
         <h2>Edit Subject</h2>
@@ -135,15 +135,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" class="breadcrumbs">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="subject.php">Subjects</a></li>
+                <li class="breadcrumb-item"><a href="../dashboard.php">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="add.php">Subjects</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Edit Subject</li>
             </ol>
         </nav>
 
         <!-- Edit Subject Form -->
         <div class="container">
-            <form action="edit_subject.php?id=<?php echo $id; ?>" method="POST">
+            <form action="edit.php?id=<?php echo $id; ?>" method="POST">
                 <div class="form-group">
                     <label for="subjectCode">Subject Code</label>
                     <!-- Make the Subject Code read-only -->
@@ -160,6 +160,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 
-    <?php include('admin/partials/footer.php'); ?>
+    <?php include('../partials/footer.php'); ?>
 </body>
 </html>
+
+
+
