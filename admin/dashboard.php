@@ -1,5 +1,3 @@
-<!-- Template Files here -->
-
 <?php
 include('../functions.php'); // Include the guard function
 guard(); // Protect the dashboard
@@ -7,16 +5,19 @@ guard(); // Protect the dashboard
 $title = "Dashboard";
 include('./partials/header.php');
 include('./partials/side-bar.php');
+
+// Count the number of subjects
+$subjectCount = countSubjects();
 ?>
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">    
-    <h1 class="h2"><php echo $title ?></h1>        
+    <h1 class="h2"><?php echo $title; ?></h1>        
     
     <div class="row mt-5">
         <div class="col-12 col-xl-3">
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white border-primary">Number of Subjects:</div>
                 <div class="card-body text-primary">
-                    <h5 class="card-title">0</h5>
+                    <h5 class="card-title"><?php echo $subjectCount; ?></h5>
                 </div>
             </div>
         </div>
@@ -40,7 +41,7 @@ include('./partials/side-bar.php');
             <div class="card border-success mb-3">
                 <div class="card-header bg-success text-white border-success">Number of Passed Students:</div>
                 <div class="card-body text-success">
-                    <h5 class="card-title">0></h5>
+                    <h5 class="card-title">0</h5>
                 </div>
             </div>
         </div>
@@ -51,4 +52,3 @@ include('./partials/side-bar.php');
 <?php
 include('./partials/footer.php'); 
 ?>
-<!-- Template Files here -->

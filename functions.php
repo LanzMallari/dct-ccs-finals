@@ -166,5 +166,25 @@ function deleteSubject($subject_id) {
     }
 }
 
+/**
+ * Counts the total number of subjects in the database
+ *
+ * @return int The total number of subjects
+ */
+function countSubjects() {
+    $conn = openCon();
+    $sql = "SELECT COUNT(*) AS subject_count FROM subjects";
+    $result = $conn->query($sql);
 
+    if ($result) {
+        $row = $result->fetch_assoc();
+        closeCon($conn);
+        return (int)$row['subject_count'];
+    } else {
+        // Log an error if the query fails
+        error_log("Error counting subjects: " . $conn->error);
+        closeCon($conn);
+        return 0; // Return 0 if there's an error
+    }
+}
 ?>
