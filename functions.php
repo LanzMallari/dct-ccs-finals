@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-/**
- * Opens a new database connection
- */
 function openCon() {
     $conn = new mysqli("localhost", "root", "", "dct-ccs-finals");
 
@@ -13,23 +10,14 @@ function openCon() {
     return $conn;
 }
 
-/**
- * Closes the database connection
- */
 function closeCon($conn) {
     $conn->close();
 }
 
-/**
- * Custom debug logging function.
- */
 function debugLog($message) {
     error_log("[DEBUG] " . $message);
 }
 
-/**
- * Logs in the user by checking username and password
- */
 function loginUser($username, $password) {
     $conn = openCon();
 
@@ -56,9 +44,6 @@ function loginUser($username, $password) {
     }
 }
 
-/**
- * Redirects unauthenticated users to the login page
- */
 function guard() {
     if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
         header("Location: index.php");
@@ -66,23 +51,13 @@ function guard() {
     }
 }
 
-/**
- * Checks if a user is logged in
- */
 function isLoggedIn() {
     return isset($_SESSION['email']);
 }
 
-/**
- * Adds a new subject to the subjects table
- */
 function addSubject($subject_code, $subject_name) {
     $conn = openCon();
 
-    // Log data being inserted for debugging
-    error_log("Adding Subject: Subject Code - $subject_code, Subject Name - $subject_name");
-
-    // Prepare the SQL query
     $sql = "INSERT INTO subjects (subject_code, subject_name) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
 
@@ -91,16 +66,13 @@ function addSubject($subject_code, $subject_name) {
         return false;
     }
 
-    // Bind the parameters
     $stmt->bind_param("ss", $subject_code, $subject_name);
 
-    // Execute the query
     if ($stmt->execute()) {
         $stmt->close();
         closeCon($conn);
         return true;
     } else {
-        // Log SQL execution errors
         error_log("Error executing SQL query: " . $stmt->error);
         $stmt->close();
         closeCon($conn);
@@ -108,9 +80,6 @@ function addSubject($subject_code, $subject_name) {
     }
 }
 
-/**
- * Updates an existing subject in the subjects table
- */
 function updateSubject($id, $subject_code, $subject_name) {
     if (empty($subject_code) || empty($subject_name) || empty($id)) {
         debugLog("Invalid input provided to updateSubject.");
@@ -145,32 +114,23 @@ function updateSubject($id, $subject_code, $subject_name) {
     return false;
 }
 
-/**
- * Deletes a subject from the subjects table
- */
 function deleteSubject($subject_id) {
-    $conn = openCon();  // Open database connection
+    $conn = openCon();
 
-    // Prepare SQL query to delete the subject by ID
     $stmt = $conn->prepare("DELETE FROM subjects WHERE id = ?");
     $stmt->bind_param("i", $subject_id);
 
     if ($stmt->execute()) {
         $stmt->close();
-        closeCon($conn);  // Close the connection
-        return true;  // Successfully deleted
+        closeCon($conn);
+        return true;
     } else {
         $stmt->close();
-        closeCon($conn);  // Close the connection
-        return false;  // Deletion failed
+        closeCon($conn);
+        return false;
     }
 }
 
-/**
- * Counts the total number of subjects in the database
- *
- * @return int The total number of subjects
- */
 function countSubjects() {
     $conn = openCon();
     $sql = "SELECT COUNT(*) AS subject_count FROM subjects";
@@ -181,23 +141,14 @@ function countSubjects() {
         closeCon($conn);
         return (int)$row['subject_count'];
     } else {
-        // Log an error if the query fails
         error_log("Error counting subjects: " . $conn->error);
         closeCon($conn);
-        return 0; // Return 0 if there's an error
+        return 0;
     }
 }
 
-
-/**
- * Registers a new student in the database
- * @param string $studentId The student ID
- * @param string $firstName The student's first name
- * @param string $lastName The student's last name
- * @return bool True if the student is registered successfully, false otherwise
- */
 function registerStudent($studentId, $firstName, $lastName) {
-    $conn = openCon(); // Open database connection
+    $conn = openCon();
     $sql = "INSERT INTO students (student_id, first_name, last_name) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
@@ -221,18 +172,6 @@ function registerStudent($studentId, $firstName, $lastName) {
     }
 }
 
-/**
- * Retrieves all students from the database
- * @return array An array of students
- */
-
-/** Registers a new student in the database
-* @param string $studentId The student ID
-* @param string $firstName The student's first name
-* @param string $lastName The student's last name
-* @return bool True if the student is registered successfully, false otherwise
-**/
-
 function getStudents() {
     $conn = openCon();
     $sql = "SELECT * FROM students";
@@ -250,24 +189,19 @@ function getStudents() {
 }
 
 function getStudentById($id) {
-    // Open database connection
     $conn = openCon();
 
-    // Prepare the SQL query to fetch student by ID
     $stmt = $conn->prepare("SELECT * FROM students WHERE id = ?");
     if (!$stmt) {
         error_log("Error preparing SQL statement: " . $conn->error);
         return null;
     }
 
-    // Bind the ID parameter
-    $stmt->bind_param("i", $id); // Use integer type binding
+    $stmt->bind_param("i", $id);
     $stmt->execute();
 
-    // Get the result
     $result = $stmt->get_result();
 
-    // Fetch and return the student data as an associative array
     if ($result->num_rows > 0) {
         $student = $result->fetch_assoc();
         $stmt->close();
@@ -275,22 +209,13 @@ function getStudentById($id) {
         return $student;
     }
 
-    // Return null if no student is found
     $stmt->close();
     closeCon($conn);
     return null;
 }
-/**
- * Updates an existing student's details in the database
- *
- * @param int $id The ID of the student to update
- * @param string $studentId The updated student ID
- * @param string $firstName The updated first name
- * @param string $lastName The updated last name
- * @return bool True if the update is successful, false otherwise
- */
+
 function updateStudent($id, $studentId, $firstName, $lastName) {
-    $conn = openCon(); // Open the database connection
+    $conn = openCon();
 
     $sql = "UPDATE students SET student_id = ?, first_name = ?, last_name = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -301,10 +226,8 @@ function updateStudent($id, $studentId, $firstName, $lastName) {
         return false;
     }
 
-    // Bind the parameters
     $stmt->bind_param("sssi", $studentId, $firstName, $lastName, $id);
 
-    // Execute the query
     if ($stmt->execute()) {
         $stmt->close();
         closeCon($conn);
@@ -314,6 +237,46 @@ function updateStudent($id, $studentId, $firstName, $lastName) {
         $stmt->close();
         closeCon($conn);
         return false;
+    }
+}
+
+function deleteStudent($id) {
+    $conn = openCon();
+
+    $stmt = $conn->prepare("DELETE FROM students WHERE id = ?");
+    if (!$stmt) {
+        error_log("Error preparing SQL statement: " . $conn->error);
+        closeCon($conn);
+        return false;
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+        closeCon($conn);
+        return $affectedRows > 0;
+    } else {
+        error_log("Error executing SQL query: " . $stmt->error);
+        $stmt->close();
+        closeCon($conn);
+        return false;
+    }
+}
+function countStudents() {
+    $conn = openCon();
+    $sql = "SELECT COUNT(*) AS total FROM students";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        $row = $result->fetch_assoc();
+        closeCon($conn);
+        return (int)$row['total'];
+    } else {
+        error_log("Error counting students: " . $conn->error);  // Log error if query fails
+        closeCon($conn);
+        return 0;
     }
 }
 
