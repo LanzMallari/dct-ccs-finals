@@ -242,7 +242,7 @@ main {
                         <td>{$student['last_name']}</td>
                         <td>
                             <div class='action-buttons'>
-                                <a href='edit_student.php?id={$student['id']}' class='btn btn-warning'>Edit</a>
+                                <a href='edit.php?id={$student['id']}' class='btn btn-warning'>Edit</a>
                                 <a href='delete_student.php?id={$student['id']}' class='btn btn-danger'>Delete</a>
                                 <a href='attach_subject.php?id={$student['id']}' class='btn btn-info'>Attach Subject</a>
                             </div>
